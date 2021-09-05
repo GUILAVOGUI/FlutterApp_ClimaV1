@@ -1,10 +1,8 @@
 import 'package:clima/screens/location_screen.dart';
-import 'package:clima/services/networking.dart';
+import 'package:clima/services/weather.dart';
 import 'package:flutter/material.dart';
-import '../services/location.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-const apikey = '514867183e6be6bfc4a903943341c4c9';
 
 
 class LoadingScreen extends StatefulWidget {
@@ -23,23 +21,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
-    Location location = Location();
-    await location.getCurrentLocation();
+    var weatherData = await WeatherModel().getLocationWeather();
 
-
-    // NetworkHelper networkHelper = NetworkHelper(url: 'https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apikey}&units=metric');
-
-    // Conakry Lat & Lon API
-    NetworkHelper networkHelper = NetworkHelper(url: 'https://api.openweathermap.org/data/2.5/weather?lat=9.56283423106296&lon=-13.647766113281252&appid=${apikey}&units=metric');
-
-      var weatherData = await networkHelper.getData();
       Navigator.push(context, MaterialPageRoute(builder: (context){
         return  LocationScreen(locationWeather: weatherData,);
       }));
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +35,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         child: SpinKitDoubleBounce(
           color: Colors.white,
           size: 100.0,
+
         ),
       ),
     );
